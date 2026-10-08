@@ -1,0 +1,308 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
+
+  body {
+    @apply bg-porcelain font-body text-ink antialiased;
+    overflow-x: hidden;
+    font-optical-sizing: auto;
+    line-height: 1.6;
+  }
+
+  a,
+  button,
+  [role='button'] {
+    touch-action: manipulation;
+  }
+
+  ::selection {
+    @apply bg-rouge text-porcelain;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.rouge');
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-shell px-5 sm:px-8;
+  }
+
+  .section {
+    @apply py-[clamp(80px,10vw,150px)];
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-muted;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply block h-px w-8 bg-current opacity-50;
+  }
+
+  /* Luxury-minimal headings: light weight, tight tracking, generous size */
+  .title {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    @apply font-normal;
+  }
+
+  .lead {
+    font-size: clamp(1rem, 1.3vw, 1.125rem);
+    @apply leading-relaxed text-muted;
+  }
+
+  .flourish {
+    @apply font-serif italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .btn {
+    @apply inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-full px-7 text-[14px] font-medium tracking-wide
+           transition-all duration-300;
+    transition-timing-function: var(--ease-soft);
+  }
+  .btn-primary {
+    @apply bg-ink text-porcelain hover:bg-rouge active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply border border-ink/20 bg-transparent text-ink hover:border-ink active:scale-[0.98];
+  }
+  .btn-ghost-light {
+    @apply border border-white/25 text-porcelain hover:border-white/70 active:scale-[0.98];
+  }
+
+  /* Feedback lives on the press: instant (100ms) on pointer-down, softer on release */
+  .btn:active {
+    transform: scale(0.97);
+    transition-duration: 100ms;
+  }
+
+  /* Magnetic button — App.jsx nudges --mx/--my toward the cursor */
+  .magnetic-btn {
+    transform: translate(var(--mx, 0px), var(--my, 0px));
+    transition: transform 0.4s var(--ease-soft), background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+  .magnetic-btn:active {
+    transform: translate(var(--mx, 0px), var(--my, 0px)) scale(0.97);
+    transition-duration: 100ms;
+  }
+
+  .card {
+    @apply rounded-[28px] border border-line bg-white;
+  }
+
+  /* Translucent chrome: content scrolls under it; bright top edge = light catching the material */
+  .glass {
+    background: rgba(248, 246, 242, 0.86);
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.7),
+      0 12px 40px -24px rgba(22, 20, 18, 0.35);
+  }
+
+  /* Hairline studio grid — the cutting-mat behind a flat-lay */
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgba(22, 20, 18, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(22, 20, 18, 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .grid-bg-dark {
+    background-image:
+      linear-gradient(to right, rgba(248, 246, 242, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(248, 246, 242, 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .js-reveal .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.9s var(--ease-soft),
+      transform 0.9s var(--ease-soft);
+  }
+  .js-reveal .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+  .d1 { transition-delay: 0.1s; }
+  .d2 { transition-delay: 0.2s; }
+  .d3 { transition-delay: 0.3s; }
+}
+
+/* ============================================================
+   Signature animation — "light motes on the plinth"
+   The reference's falling water drops, re-skinned for a photo
+   studio: specks of studio light fall onto a product plinth,
+   bloom into ripple rings on the surface, and every few beats
+   the strobe fires. Same keyframe names as the reference.
+   ============================================================ */
+@keyframes rain-fall {
+  0% { transform: translateY(-40px) rotate(0deg) scale(0.6); opacity: 0; }
+  12% { opacity: 1; }
+  78% { transform: translateY(var(--fall, 150px)) rotate(180deg) scale(1); opacity: 1; }
+  82%, 100% { transform: translateY(var(--fall, 150px)) rotate(200deg) scale(0); opacity: 0; }
+}
+
+@keyframes rain-ripple {
+  0%, 76% { transform: scale(0.2); opacity: 0; }
+  80% { opacity: 0.7; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+@keyframes rain-fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Soft strobe — eased, never a hard brightness jump */
+@keyframes strobe {
+  0%, 84%, 100% { opacity: 0; }
+  88% { opacity: 0.55; }
+  96% { opacity: 0; }
+}
+
+/* Lightbox: the surface materialises (blur + scale together) out of the tapped
+   tile, and leaves along the same path, faster than it arrived. */
+@keyframes lb-scrim-in {
+  from { opacity: 0; backdrop-filter: blur(0); -webkit-backdrop-filter: blur(0); }
+}
+@keyframes lb-fig-in {
+  from { opacity: 0; transform: scale(0.6); filter: blur(10px); }
+}
+.lb-scrim {
+  background: rgba(248, 246, 242, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: lb-scrim-in 280ms var(--ease-soft) both;
+}
+.lb-figure {
+  animation: lb-fig-in 380ms var(--ease-soft) both;
+}
+.lb-scrim.is-closing {
+  opacity: 0;
+  transition: opacity 180ms ease-in;
+}
+.lb-scrim.is-closing .lb-figure {
+  transform: scale(0.6);
+  filter: blur(8px);
+  transition: transform 180ms ease-in, filter 180ms ease-in;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(10px, -16px) rotate(12deg); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.anim-mote {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rain-fall var(--dur, 3.2s) cubic-bezier(0.55, 0, 0.75, 0.4) infinite;
+  animation-delay: var(--delay, 0s);
+}
+.anim-ripple {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rain-ripple var(--dur, 3.2s) ease-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+.anim-fadein {
+  animation: rain-fadein 1.2s var(--ease-soft) both;
+}
+.anim-strobe {
+  animation: strobe 6.4s ease-out infinite;
+}
+.anim-drift {
+  animation: drift 10s ease-in-out infinite;
+}
+.anim-marquee {
+  animation: marquee 40s linear infinite;
+}
+.anim-dot {
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+/* ============================================================
+   Reduced motion — freeze decorative motion, keep layout.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .js-reveal .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .lb-figure {
+    animation: rain-fadein 200ms ease both !important;
+  }
+}
+
+/* Reduced transparency — frost the materials solid */
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .lb-scrim {
+    background: #f8f6f2;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Increased contrast — near-solid surfaces with defined edges */
+@media (prefers-contrast: more) {
+  .glass {
+    background: #f8f6f2;
+    border-color: #161412 !important;
+  }
+  .card {
+    border-color: #68615a;
+  }
+}
+
+/* Decorative footer wordmark — rendered as generated content so it is not read
+   as (low-contrast) text by assistive tech or contrast checkers. */
+.footer-mark::before {
+  content: 'Trouvaille';
+}
