@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.jsx'
 import Privacy from './Privacy.jsx'
 import Terms from './Terms.jsx'
+import { Analytics } from '@vercel/analytics/react'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -15,5 +16,6 @@ createRoot(document.getElementById('root')).render(
         <Route path="/terms" element={<Terms />} />
       </Routes>
     </BrowserRouter>
+    <Analytics />
   </StrictMode>,
 )
